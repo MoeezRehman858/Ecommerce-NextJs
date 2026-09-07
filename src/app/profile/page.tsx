@@ -1,9 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 
 export default function ProfilePage() {
   const [user, setUser] = useState<any>(null);
+  const [loggingOut, setLoggingOut] = useState(false);
+
   useEffect(() => {
     const fetchUser = async () => {
       const res = await fetch("/api/user/me", {
@@ -11,7 +14,7 @@ export default function ProfilePage() {
       });
 
       if (!res.ok) {
-        window.location.href = "/login"; // 🔥 protect route
+        window.location.href = "/login";
         return;
       }
 
@@ -21,22 +24,119 @@ export default function ProfilePage() {
 
     fetchUser();
   }, []);
-  if (!user) return <p>Loading...</p>;
 
   const handleLogout = async () => {
+    setLoggingOut(true);
     await fetch("/api/auth/logout", {
       method: "POST",
       credentials: "include",
     });
-
     window.location.href = "/login";
   };
+
+  if (!user) {
+    return (
+      <div className="min-h-screen bg-[#0B0B10] flex items-center justify-center">
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-8 h-8 rounded-full border-2 border-[#2A2A35] border-t-[#7C5CFC] animate-spin" />
+          <p className="text-[#8B8B99] text-sm">Loading your profile…</p>
+        </div>
+      </div>
+    );
+  }
+
+  const initial = user.name ? user.name.charAt(0).toUpperCase() : "?";
+
   return (
-    <div style={{ padding: "20px" }}>
-      <h1>Profile</h1>
-      <p>Name: {user.name}</p>
-      <p>Email: {user.email}</p>
-      <button onClick={handleLogout}>Logout</button>
+    <div className="min-h-screen bg-[#0B0B10] px-4 py-16">
+      <div className="max-w-2xl mx-auto">
+        <h1
+          className="text-white text-3xl font-bold mb-8 tracking-tight"
+          style={{ fontFamily: "var(--font-display, sans-serif)" }}
+        >
+          Your profile
+        </h1>
+
+        <div className="bg-[#15151D] border border-[#2A2A35] rounded-2xl overflow-hidden">
+          {/* Header */}
+          <div
+            className="relative h-28"
+            style={{
+              background:
+                "radial-gradient(120% 180% at 20% 0%, #1a1530 0%, #15151D 70%)",
+            }}
+          >
+            <div className="absolute -bottom-10 left-8">
+              <div
+                className="w-20 h-20 rounded-full flex items-center justify-center text-2xl font-bold text-[#0B0B10] border-4 border-[#15151D]"
+                style={{ background: "linear-gradient(135deg, #7C5CFC, #33E6CC)" }}
+              >
+                {initial}
+              </div>
+            </div>
+            {user.isAdmin && (
+              <span className="absolute top-4 right-4 bg-[#0B0B10]/70 backdrop-blur text-[#33E6CC] text-[11px] font-medium px-3 py-1 rounded-full border border-[#2A2A35]">
+                Admin
+              </span>
+            )}
+          </div>
+
+          {/* Body */}
+          <div className="pt-14 px-8 pb-8">
+            <h2 className="text-white text-xl font-semibold">{user.name}</h2>
+            <p className="text-[#8B8B99] text-sm mt-1">{user.email}</p>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-8">
+              <InfoRow label="Name" value={user.name} />
+              <InfoRow label="Email" value={user.email} />
+              <InfoRow
+                label="Account type"
+                value={user.isAdmin ? "Admin" : "Customer"}
+              />
+              <InfoRow
+                label="Member since"
+                value={
+                  user.createdAt
+                    ? new Date(user.createdAt).toLocaleDateString()
+                    : "—"
+                }
+              />
+            </div>
+
+            <div className="flex flex-col sm:flex-row gap-3 mt-8">
+              <Link href="/orders" className="flex-1">
+                <button className="w-full border border-[#2A2A35] text-white py-3 rounded-xl text-sm hover:border-[#7C5CFC] transition">
+                  View orders
+                </button>
+              </Link>
+              <Link href="/wishlist" className="flex-1">
+                <button className="w-full border border-[#2A2A35] text-white py-3 rounded-xl text-sm hover:border-[#7C5CFC] transition">
+                  View wishlist
+                </button>
+              </Link>
+            </div>
+
+            <button
+              onClick={handleLogout}
+              disabled={loggingOut}
+              className="w-full mt-3 py-3 rounded-xl text-sm font-semibold text-red-400 border border-red-400/30 hover:bg-red-400/10 transition disabled:opacity-60"
+            >
+              {loggingOut ? "Logging out…" : "Log out"}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function InfoRow({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="bg-[#0B0B10] border border-[#2A2A35] rounded-xl px-4 py-3">
+      <p className="text-[#5A5A66] text-[11px] uppercase tracking-wide mb-1">
+        {label}
+      </p>
+      <p className="text-white text-sm truncate">{value}</p>
     </div>
   );
 }

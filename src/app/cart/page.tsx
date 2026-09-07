@@ -18,16 +18,15 @@ type CartItem = {
 
 export default function CartPage() {
   const [cart, setCart] = useState<CartItem[]>([]);
+  const [checkingOut, setCheckingOut] = useState(false);
 
   useEffect(() => {
     const storedCart = JSON.parse(localStorage.getItem("cart") || "[]");
-
     setCart(storedCart);
   }, []);
 
   const updateCart = (updatedCart: CartItem[]) => {
     setCart(updatedCart);
-
     localStorage.setItem("cart", JSON.stringify(updatedCart));
   };
 
@@ -35,31 +34,22 @@ export default function CartPage() {
     const updatedCart = cart.map((item) =>
       item._id === id ? { ...item, quantity: item.quantity + 1 } : item,
     );
-
     updateCart(updatedCart);
   };
 
   const decreaseQuantity = (id: string) => {
     const updatedCart = cart
       .map((item) =>
-        item._id === id
-          ? {
-              ...item,
-              quantity: item.quantity - 1,
-            }
-          : item,
+        item._id === id ? { ...item, quantity: item.quantity - 1 } : item,
       )
       .filter((item) => item.quantity > 0);
-
     updateCart(updatedCart);
   };
 
   const removeItem = (id: string) => {
     const updatedCart = cart.filter((item) => item._id !== id);
-
     updateCart(updatedCart);
-
-    toast.success("Item removed 🗑");
+    toast.success("Item removed");
   };
 
   const totalPrice = cart.reduce(
@@ -68,97 +58,107 @@ export default function CartPage() {
   );
 
   const handleCheckout = async () => {
-    const stripe = await stripePromise;
+    setCheckingOut(true);
+    try {
+      const stripe = await stripePromise;
 
-    const res = await fetch("/api/checkout", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        cartItems: cart,
-      }),
-    });
+      const res = await fetch("/api/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ cartItems: cart }),
+      });
 
-    const data = await res.json();
-    window.location.href = data.url;
+      const data = await res.json();
+      window.location.href = data.url;
+    } catch {
+      setCheckingOut(false);
+    }
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 p-6">
-      <h1 className="text-4xl font-bold mb-8"> Your Cart</h1>
+    <div className="min-h-screen bg-[#0B0B10] px-4 md:px-8 py-12">
+      <div className="max-w-4xl mx-auto">
+        <h1
+          className="text-white text-3xl md:text-4xl font-bold mb-8 tracking-tight"
+          style={{ fontFamily: "var(--font-display, sans-serif)" }}
+        >
+          Your cart
+        </h1>
 
-      {cart.length === 0 ? (
-        <div className="bg-white p-10 rounded-2xl shadow text-center">
-          <h2 className="text-2xl font-semibold">Cart is empty</h2>
-        </div>
-      ) : (
-        <div className="space-y-6">
-          {cart.map((item) => (
-            <div
-              key={item._id}
-              className="bg-white rounded-2xl shadow-md p-4 flex flex-col md:flex-row items-center gap-6"
-            >
-              <img
-                src={item.image}
-                alt={item.name}
-                className="w-full md:w-32 h-56 md:h-32 object-cover rounded-xl"
-              />
+        {cart.length === 0 ? (
+          <div className="bg-[#15151D] border border-[#2A2A35] p-10 rounded-2xl text-center">
+            <p className="text-[#8B8B99]">Your cart is empty.</p>
+          </div>
+        ) : (
+          <div className="space-y-4">
+            {cart.map((item) => (
+              <div
+                key={item._id}
+                className="bg-[#15151D] border border-[#2A2A35] rounded-2xl p-4 flex flex-col md:flex-row items-center gap-6"
+              >
+                <img
+                  src={item.image}
+                  alt={item.name}
+                  className="w-full md:w-28 h-40 md:h-28 object-cover rounded-xl"
+                />
 
-              <div className="flex-1 w-full text-center md:text-left">
-                <h2 className="text-xl md:text-2xl font-semibold">
-                  {item.name}
-                </h2>
+                <div className="flex-1 w-full text-center md:text-left">
+                  <h2 className="text-white text-lg font-semibold">
+                    {item.name}
+                  </h2>
+                  <p className="text-[#33E6CC] mt-1">${item.price}</p>
 
-                <p className="text-gray-600 mt-2">${item.price}</p>
+                  <div className="flex justify-center md:justify-start items-center gap-3 mt-4">
+                    <button
+                      onClick={() => decreaseQuantity(item._id)}
+                      className="w-9 h-9 flex items-center justify-center bg-[#0B0B10] border border-[#2A2A35] rounded-lg text-white hover:border-[#7C5CFC] transition"
+                    >
+                      −
+                    </button>
+                    <span className="text-white font-semibold w-6 text-center">
+                      {item.quantity}
+                    </span>
+                    <button
+                      onClick={() => increaseQuantity(item._id)}
+                      className="w-9 h-9 flex items-center justify-center bg-[#0B0B10] border border-[#2A2A35] rounded-lg text-white hover:border-[#7C5CFC] transition"
+                    >
+                      +
+                    </button>
+                  </div>
+                </div>
 
-                <div className="flex justify-center md:justify-start items-center gap-4 mt-4">
+                <div className="flex flex-col items-center md:items-end gap-3 w-full md:w-auto">
+                  <p className="text-white text-lg font-bold">
+                    ${item.price * item.quantity}
+                  </p>
                   <button
-                    onClick={() => decreaseQuantity(item._id)}
-                    className="bg-gray-200 px-4 py-2 rounded-lg text-xl"
+                    onClick={() => removeItem(item._id)}
+                    className="text-red-400 border border-red-400/30 px-5 py-2 rounded-lg text-sm hover:bg-red-400/10 transition"
                   >
-                    -
-                  </button>
-
-                  <span className="text-xl font-bold">{item.quantity}</span>
-
-                  <button
-                    onClick={() => increaseQuantity(item._id)}
-                    className="bg-gray-200 px-4 py-2 rounded-lg text-xl"
-                  >
-                    +
+                    Remove
                   </button>
                 </div>
               </div>
+            ))}
 
-              <div className="flex flex-col items-center md:items-end gap-4 w-full md:w-auto">
-                <p className="text-xl font-bold">
-                  ${item.price * item.quantity}
-                </p>
-
-                <button
-                  onClick={() => removeItem(item._id)}
-                  className="bg-red-500 text-white px-6 py-2 rounded-lg hover:bg-red-600 transition"
-                >
-                  Remove
-                </button>
-              </div>
+            <div className="bg-[#15151D] border border-[#2A2A35] p-6 rounded-2xl flex justify-between items-center mt-6">
+              <h2 className="text-white text-xl font-semibold">Total</h2>
+              <p className="text-2xl font-bold text-[#33E6CC]">
+                ${totalPrice}
+              </p>
             </div>
-          ))}
 
-          <div className="bg-white p-6 rounded-2xl shadow-md flex justify-between items-center">
-            <h2 className="text-3xl font-bold">Total:</h2>
-
-            <p className="text-3xl font-bold text-blue-600">${totalPrice}</p>
+            <button
+              onClick={handleCheckout}
+              disabled={checkingOut}
+              className="w-full text-[#0B0B10] font-semibold py-3.5 rounded-xl mt-2 transition disabled:opacity-60"
+              style={{ background: "linear-gradient(90deg, #7C5CFC, #33E6CC)" }}
+            >
+              {checkingOut ? "Redirecting to checkout…" : "Proceed to checkout"}
+            </button>
           </div>
-          <button
-            onClick={handleCheckout}
-            className="w-full bg-green-600 text-white py-3 rounded-xl hover:bg-green-700 transition mt-6"
-          >
-            Proceed to Checkout 💳
-          </button>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 }

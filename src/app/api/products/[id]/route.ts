@@ -22,8 +22,10 @@ export async function GET(
 
     return NextResponse.json(product);
   } catch (error) {
+    console.error("FULL ERROR:", error);
+
     return NextResponse.json(
-      { message: "Error fetching product" },
+      { message: "Failed to fetch product" },
       { status: 500 }
     );
   }
@@ -50,6 +52,7 @@ export async function DELETE(
     );
   }
 }
+
 export async function PUT(
   req: Request,
   { params }: { params: Promise<{ id: string }> }
