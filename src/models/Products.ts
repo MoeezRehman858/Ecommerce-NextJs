@@ -1,17 +1,22 @@
 import mongoose from "mongoose";
 
-const productSchema = new mongoose.Schema({
-    name:{
-        type: String,
-        required: true
+const productSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: true,
     },
-     price: {
+    price: {
       type: Number,
       required: true,
     },
     image: {
       type: String,
       required: true,
+    },
+    images: {
+      type: [String],
+      default: [],
     },
     description: {
       type: String,
@@ -20,8 +25,13 @@ const productSchema = new mongoose.Schema({
       type: String,
       required: true,
     },
-},
-{ timestamps : true }
+    collection: {
+      type: String, // stores the Collection's _id, optional
+      default: "",
+    },
+  },
+  { timestamps: true }
 );
 
-export default mongoose.models.Product || mongoose.model("Product", productSchema);
+export default mongoose.models.Product ||
+  mongoose.model("Product", productSchema);

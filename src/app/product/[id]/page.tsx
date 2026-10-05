@@ -21,12 +21,14 @@ export default function ProductPage({
   const [reviewImage, setReviewImage] = useState("");
   const [uploadingReviewImage, setUploadingReviewImage] = useState(false);
   const [submittingReview, setSubmittingReview] = useState(false);
+  const [activeImage, setActiveImage] = useState("");
 
   useEffect(() => {
     const fetchProduct = async () => {
       const res = await fetch(`/api/products/${resolvedParams.id}`);
       const data = await res.json();
       setProduct(data);
+      setActiveImage(data.image);
 
       const reviewRes = await fetch(
         `/api/reviews?productId=${resolvedParams.id}`,
@@ -152,12 +154,38 @@ export default function ProductPage({
   return (
     <div className="min-h-screen bg-[#0B0B10] px-4 md:px-8 py-12">
       <div className="bg-[#15151D] border border-[#2A2A35] rounded-2xl overflow-hidden max-w-6xl mx-auto grid md:grid-cols-2">
-        <div className="h-72 md:h-full">
-          <img
-            src={product.image}
-            alt={product.name}
-            className="w-full h-full object-cover"
-          />
+        <div className="flex flex-col">
+          <div className="h-72 md:h-[26rem]">
+            <img
+              src={activeImage || product.image}
+              alt={product.name}
+              className="w-full h-full object-cover"
+            />
+          </div>
+
+          {Array.isArray(product.images) && product.images.length > 1 && (
+            <div className="flex gap-2 p-3 overflow-x-auto">
+              {product.images.map((img: string, i: number) => (
+                <button
+                  key={i}
+                  onClick={() => setActiveImage(img)}
+                  className="shrink-0 w-16 h-16 rounded-lg overflow-hidden transition"
+                  style={{
+                    outline:
+                      activeImage === img
+                        ? "2px solid #33E6CC"
+                        : "2px solid transparent",
+                  }}
+                >
+                  <img
+                    src={img}
+                    alt={`${product.name} ${i + 1}`}
+                    className="w-full h-full object-cover"
+                  />
+                </button>
+              ))}
+            </div>
+          )}
         </div>
 
         <div className="p-8 flex flex-col justify-center">

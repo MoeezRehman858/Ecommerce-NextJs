@@ -29,6 +29,7 @@ export default function Navbar() {
   const links = [
     { href: "/", label: "Home" },
     { href: "/product", label: "Products" },
+    { href: "/collections", label: "Collections" },
     { href: "/cart", label: "Cart" },
     { href: "/wishlist", label: "Wishlist" },
   ];
@@ -70,6 +71,12 @@ export default function Navbar() {
                 className="text-[#33E6CC] hover:text-white transition"
               >
                 Add Product
+              </Link>
+              <Link
+                href="/admin/add-collection"
+                className="text-[#33E6CC] hover:text-white transition"
+              >
+                Add Collection
               </Link>
             </>
           )}
@@ -164,6 +171,13 @@ export default function Navbar() {
                 className="text-[#33E6CC] hover:text-white transition"
               >
                 Add Product
+              </Link>
+              <Link
+                href="/admin/add-collection"
+                onClick={() => setMenuOpen(false)}
+                className="text-[#33E6CC] hover:text-white transition"
+              >
+                Add Collection
               </Link>
             </>
           )}

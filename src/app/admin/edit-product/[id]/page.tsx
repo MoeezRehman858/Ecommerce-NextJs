@@ -16,8 +16,10 @@ export default function EditProductPage({
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
   const [description, setDescription] = useState("");
-  const [image, setImage] = useState("");
+  const [images, setImages] = useState<string[]>([]);
   const [category, setCategory] = useState(CATEGORIES[0]);
+  const [collectionId, setCollectionId] = useState("");
+  const [collections, setCollections] = useState<any[]>([]);
   const [user, setUser] = useState<any>(null);
   const [userLoading, setUserLoading] = useState(true);
   const [productLoading, setProductLoading] = useState(true);
@@ -26,10 +28,7 @@ export default function EditProductPage({
 
   useEffect(() => {
     const fetchUser = async () => {
-      const res = await fetch("/api/user/me", {
-        credentials: "include",
-      });
-
+      const res = await fetch("/api/user/me", { credentials: "include" });
       if (res.ok) {
         const data = await res.json();
         setUser(data);
@@ -37,7 +36,14 @@ export default function EditProductPage({
       setUserLoading(false);
     };
 
+    const fetchCollections = async () => {
+      const res = await fetch("/api/collections");
+      const data = await res.json();
+      setCollections(Array.isArray(data) ? data : []);
+    };
+
     fetchUser();
+    fetchCollections();
   }, []);
 
   useEffect(() => {
@@ -48,48 +54,84 @@ export default function EditProductPage({
       setName(data.name);
       setPrice(data.price);
       setDescription(data.description);
-      setImage(data.image);
+      setImages(
+        Array.isArray(data.images) && data.images.length > 0
+          ? data.images
+          : data.image
+            ? [data.image]
+            : [],
+      );
       setCategory(data.category || CATEGORIES[0]);
+      setCollectionId(data.collection || "");
       setProductLoading(false);
     };
 
     fetchProduct();
   }, [resolvedParams.id]);
 
-  const handleImageUpload = (e: any) => {
-    const file = e.target.files[0];
-    if (!file) return;
+  const uploadOneFile = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
 
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
+      reader.onloadend = async () => {
+        try {
+          const res = await fetch("/api/upload", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ image: reader.result }),
+          });
+          const data = await res.json();
+          resolve(data.url);
+        } catch (err) {
+          reject(err);
+        }
+      };
 
-    reader.onloadend = async () => {
-      setUploading(true);
-      try {
-        const res = await fetch("/api/upload", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ image: reader.result }),
-        });
+      reader.onerror = reject;
+    });
+  };
 
-        const data = await res.json();
-        setImage(data.url);
-      } catch {
-        toast.error("Image upload failed");
-      } finally {
-        setUploading(false);
-      }
-    };
+  const handleImagesUpload = async (e: any) => {
+    const files = Array.from(e.target.files) as File[];
+    if (files.length === 0) return;
+
+    setUploading(true);
+    try {
+      const urls = await Promise.all(files.map(uploadOneFile));
+      setImages((prev) => [...prev, ...urls]);
+    } catch {
+      toast.error("Some images failed to upload");
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const removeImage = (url: string) => {
+    setImages((prev) => prev.filter((img) => img !== url));
   };
 
   const handleUpdate = async () => {
+    if (images.length === 0) {
+      toast.error("At least one image is required.");
+      return;
+    }
+
     setSubmitting(true);
 
     try {
       const res = await fetch(`/api/products/${resolvedParams.id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, price, description, image, category }),
+        body: JSON.stringify({
+          name,
+          price,
+          description,
+          image: images[0],
+          images,
+          category,
+          collection: collectionId,
+        }),
       });
 
       if (res.ok) {
@@ -158,25 +200,60 @@ export default function EditProductPage({
             ))}
           </select>
 
+          <select
+            value={collectionId}
+            onChange={(e) => setCollectionId(e.target.value)}
+            className="w-full bg-[#0B0B10] border border-[#2A2A35] text-white p-3 rounded-xl outline-none focus:border-[#7C5CFC] transition text-sm"
+          >
+            <option value="">No collection</option>
+            {collections.map((col) => (
+              <option key={col._id} value={col._id}>
+                {col.name}
+              </option>
+            ))}
+          </select>
+
           <label className="relative flex flex-col items-center justify-center border border-dashed border-[#2A2A35] hover:border-[#7C5CFC] rounded-xl p-6 cursor-pointer transition text-center">
             <input
               type="file"
               accept="image/*"
-              onChange={handleImageUpload}
+              multiple
+              onChange={handleImagesUpload}
               className="absolute inset-0 opacity-0 cursor-pointer"
             />
             {uploading ? (
               <p className="text-[#8B8B99] text-sm">Uploading…</p>
-            ) : image ? (
-              <img
-                src={image}
-                alt="Preview"
-                className="w-full h-40 object-cover rounded-lg"
-              />
             ) : (
-              <p className="text-[#8B8B99] text-sm">Click to upload an image</p>
+              <p className="text-[#8B8B99] text-sm">
+                Click to add more images
+              </p>
             )}
           </label>
+
+          {images.length > 0 && (
+            <div className="grid grid-cols-4 gap-2">
+              {images.map((img, i) => (
+                <div key={img} className="relative">
+                  <img
+                    src={img}
+                    alt={`Preview ${i + 1}`}
+                    className="w-full h-16 object-cover rounded-lg"
+                    style={
+                      i === 0
+                        ? { outline: "2px solid #33E6CC" }
+                        : undefined
+                    }
+                  />
+                  <button
+                    onClick={() => removeImage(img)}
+                    className="absolute -top-1.5 -right-1.5 w-5 h-5 flex items-center justify-center bg-[#0B0B10] border border-[#2A2A35] rounded-full text-white text-xs"
+                  >
+                    ×
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
 
           <button
             onClick={handleUpdate}
