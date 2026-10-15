@@ -1,9 +1,9 @@
-<<<<<<< HEAD
+
 import Navbar from "@/components/Navbar";
 import "./global.css";
 import { Toaster } from "react-hot-toast";
 import Footer from "@/components/Footer";
-=======
+
 import type { Metadata } from "next";
 import { Space_Grotesk, Inter } from "next/font/google";
 import { Toaster } from "react-hot-toast";
@@ -26,14 +26,15 @@ export const metadata: Metadata = {
   description: "A modern ecommerce store built with Next.js and MongoDB.",
 };
 
->>>>>>> 414d771 (CSS Changes)
+
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   return (
-<<<<<<< HEAD
+
+
     <html lang="en">
       <body>
         <Navbar /> 
@@ -44,7 +45,6 @@ export default function RootLayout({
     </html>
   );
 }
-=======
     <html lang="en" className={`${display.variable} ${body.variable}`}>
       <body
         className="min-h-screen flex flex-col"
@@ -67,4 +67,3 @@ export default function RootLayout({
     </html>
   );
 }
->>>>>>> 414d771 (CSS Changes)
