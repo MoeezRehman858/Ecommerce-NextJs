@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+<<<<<<< HEAD
 import { cookies } from "next/headers";
 import jwt from "jsonwebtoken";
 import User from "@/models/User";
@@ -28,4 +29,16 @@ export async function GET() {
   } catch (error) {
     return NextResponse.json({ message: "Invalid token" }, { status: 401 });
   }
+=======
+import { getCurrentUser } from "@/lib/auth";
+
+export async function GET() {
+  const user = await getCurrentUser();
+
+  if (!user) {
+    return NextResponse.json({ message: "Not authenticated" }, { status: 401 });
+  }
+
+  return NextResponse.json(user);
+>>>>>>> 414d771 (CSS Changes)
 }

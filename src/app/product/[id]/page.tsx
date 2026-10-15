@@ -146,14 +146,24 @@ export default function ProductPage({
 
   if (!product)
     return (
+<<<<<<< HEAD
       <div className="min-h-screen bg-[#0B0B10] flex items-center justify-center">
         <div className="w-8 h-8 rounded-full border-2 border-[#2A2A35] border-t-[#7C5CFC] animate-spin" />
+=======
+      <div className="min-h-screen bg-bg flex items-center justify-center">
+        <div className="w-8 h-8 rounded-full border-2 border-line border-t-brand animate-spin" />
+>>>>>>> 414d771 (CSS Changes)
       </div>
     );
 
   return (
+<<<<<<< HEAD
     <div className="min-h-screen bg-[#0B0B10] px-4 md:px-8 py-12">
       <div className="bg-[#15151D] border border-[#2A2A35] rounded-2xl overflow-hidden max-w-6xl mx-auto grid md:grid-cols-2">
+=======
+    <div className="min-h-screen bg-bg px-4 md:px-8 py-12">
+      <div className="bg-surface border border-line rounded-2xl overflow-hidden max-w-6xl mx-auto grid md:grid-cols-2">
+>>>>>>> 414d771 (CSS Changes)
         <div className="flex flex-col">
           <div className="h-72 md:h-[26rem]">
             <img
@@ -173,7 +183,11 @@ export default function ProductPage({
                   style={{
                     outline:
                       activeImage === img
+<<<<<<< HEAD
                         ? "2px solid #33E6CC"
+=======
+                        ? "2px solid #ff8a3d"
+>>>>>>> 414d771 (CSS Changes)
                         : "2px solid transparent",
                   }}
                 >
@@ -189,48 +203,81 @@ export default function ProductPage({
         </div>
 
         <div className="p-8 flex flex-col justify-center">
+<<<<<<< HEAD
           <span className="text-[#33E6CC] text-xs font-medium tracking-wide uppercase mb-2">
+=======
+          <span className="text-accent text-xs font-medium tracking-wide uppercase mb-2">
+>>>>>>> 414d771 (CSS Changes)
             {product.category}
           </span>
 
           <h1
+<<<<<<< HEAD
             className="text-white text-3xl md:text-4xl font-bold tracking-tight"
+=======
+            className="text-ink text-3xl md:text-4xl font-bold tracking-tight"
+>>>>>>> 414d771 (CSS Changes)
             style={{ fontFamily: "var(--font-display, sans-serif)" }}
           >
             {product.name}
           </h1>
 
+<<<<<<< HEAD
           <p className="text-2xl font-bold mt-4 text-[#33E6CC]">
             ${product.price}
           </p>
 
           <p className="text-[#8B8B99] mt-4 leading-relaxed">
+=======
+          <p className="text-2xl font-bold mt-4 text-accent">
+            ${product.price}
+          </p>
+
+          <p className="text-muted mt-4 leading-relaxed">
+>>>>>>> 414d771 (CSS Changes)
             {product.description}
           </p>
 
           <button
             onClick={addToCart}
+<<<<<<< HEAD
             className="mt-6 text-[#0B0B10] font-semibold py-3 rounded-xl transition"
             style={{ background: "linear-gradient(90deg, #7C5CFC, #33E6CC)" }}
+=======
+            className="mt-6 text-bg font-semibold py-3 rounded-xl transition bg-brand hover:bg-brand-hover"
+>>>>>>> 414d771 (CSS Changes)
           >
             Add to cart
           </button>
 
+<<<<<<< HEAD
           <div className="mt-10 border-t border-[#2A2A35] pt-6">
             <h2 className="text-white text-xl font-bold mb-4">Add a review</h2>
+=======
+          <div className="mt-10 border-t border-line pt-6">
+            <h2 className="text-ink text-xl font-bold mb-4">Add a review</h2>
+>>>>>>> 414d771 (CSS Changes)
 
             <textarea
               placeholder="Write your review…"
               value={comment}
               onChange={(e) => setComment(e.target.value)}
               rows={3}
+<<<<<<< HEAD
               className="w-full bg-[#0B0B10] border border-[#2A2A35] text-white placeholder-[#5A5A66] p-3 rounded-xl outline-none focus:border-[#7C5CFC] transition text-sm resize-none mb-3"
+=======
+              className="w-full bg-bg border border-line text-ink placeholder:text-faint p-3 rounded-xl outline-none focus:border-brand transition text-sm resize-none mb-3"
+>>>>>>> 414d771 (CSS Changes)
             />
 
             <select
               value={rating}
               onChange={(e) => setRating(Number(e.target.value))}
+<<<<<<< HEAD
               className="w-full bg-[#0B0B10] border border-[#2A2A35] text-white p-3 rounded-xl outline-none focus:border-[#7C5CFC] transition text-sm mb-3"
+=======
+              className="w-full bg-bg border border-line text-ink p-3 rounded-xl outline-none focus:border-brand transition text-sm mb-3"
+>>>>>>> 414d771 (CSS Changes)
             >
               <option value={5}>5 stars</option>
               <option value={4}>4 stars</option>
@@ -239,7 +286,11 @@ export default function ProductPage({
               <option value={1}>1 star</option>
             </select>
 
+<<<<<<< HEAD
             <label className="relative flex flex-col items-center justify-center border border-dashed border-[#2A2A35] hover:border-[#7C5CFC] rounded-xl p-5 cursor-pointer transition text-center">
+=======
+            <label className="relative flex flex-col items-center justify-center border border-dashed border-line hover:border-brand rounded-xl p-5 cursor-pointer transition text-center">
+>>>>>>> 414d771 (CSS Changes)
               <input
                 type="file"
                 accept="image/*"
@@ -247,7 +298,11 @@ export default function ProductPage({
                 className="absolute inset-0 opacity-0 cursor-pointer"
               />
               {uploadingReviewImage ? (
+<<<<<<< HEAD
                 <p className="text-[#8B8B99] text-sm">Uploading…</p>
+=======
+                <p className="text-muted text-sm">Uploading…</p>
+>>>>>>> 414d771 (CSS Changes)
               ) : reviewImage ? (
                 <img
                   src={reviewImage}
@@ -255,7 +310,11 @@ export default function ProductPage({
                   className="w-24 h-24 object-cover rounded-lg"
                 />
               ) : (
+<<<<<<< HEAD
                 <p className="text-[#8B8B99] text-sm">
+=======
+                <p className="text-muted text-sm">
+>>>>>>> 414d771 (CSS Changes)
                   Attach a photo (optional)
                 </p>
               )}
@@ -264,7 +323,11 @@ export default function ProductPage({
             <button
               onClick={submitReview}
               disabled={submittingReview || uploadingReviewImage}
+<<<<<<< HEAD
               className="mt-4 w-full bg-[#0B0B10] border border-[#2A2A35] text-white py-3 rounded-xl hover:border-[#7C5CFC] transition disabled:opacity-60"
+=======
+              className="mt-4 w-full bg-bg border border-line text-ink py-3 rounded-xl hover:border-brand transition disabled:opacity-60"
+>>>>>>> 414d771 (CSS Changes)
             >
               {submittingReview ? "Submitting…" : "Submit review"}
             </button>
@@ -275,13 +338,18 @@ export default function ProductPage({
       {/* REVIEWS */}
       <div className="max-w-6xl mx-auto mt-10">
         <h2
+<<<<<<< HEAD
           className="text-white text-2xl md:text-3xl font-bold mb-6 tracking-tight"
+=======
+          className="text-ink text-2xl md:text-3xl font-bold mb-6 tracking-tight"
+>>>>>>> 414d771 (CSS Changes)
           style={{ fontFamily: "var(--font-display, sans-serif)" }}
         >
           Customer reviews
         </h2>
 
         {reviews.length === 0 ? (
+<<<<<<< HEAD
           <div className="bg-[#15151D] border border-[#2A2A35] p-6 rounded-2xl">
             <p className="text-[#8B8B99]">No reviews yet.</p>
           </div>
@@ -295,12 +363,31 @@ export default function ProductPage({
                 <div className="flex justify-between items-center">
                   <h3 className="font-semibold text-white">{review.name}</h3>
                   <p className="text-amber-400 font-semibold text-sm">
+=======
+          <div className="bg-surface border border-line p-6 rounded-2xl">
+            <p className="text-muted">No reviews yet.</p>
+          </div>
+        ) : (
+          <div className="space-y-4 stagger">
+            {reviews.map((review) => (
+              <div
+                key={review._id}
+                className="bg-surface border border-line p-5 rounded-2xl"
+              >
+                <div className="flex justify-between items-center">
+                  <h3 className="font-semibold text-ink">{review.name}</h3>
+                  <p className="text-brand font-semibold text-sm">
+>>>>>>> 414d771 (CSS Changes)
                     {"★".repeat(review.rating)}
                     {"☆".repeat(5 - review.rating)}
                   </p>
                 </div>
 
+<<<<<<< HEAD
                 <p className="mt-3 text-[#B8B8C4] text-sm leading-relaxed">
+=======
+                <p className="mt-3 text-soft text-sm leading-relaxed">
+>>>>>>> 414d771 (CSS Changes)
                   {review.comment}
                 </p>
 
