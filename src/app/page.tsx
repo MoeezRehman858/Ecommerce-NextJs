@@ -5,20 +5,13 @@ import Link from "next/link";
 import HeroSlider from "@/components/HeroSlider";
 import WelcomePopup from "@/components/WelcomePopup";
 import { toast } from "react-hot-toast";
-<<<<<<< HEAD
-=======
 import { useUser } from "@/lib/useUser";
->>>>>>> 414d771 (CSS Changes)
 
 const CATEGORIES = ["All", "Phones", "Shoes", "Clothes"];
 
 export default function Home() {
   const [products, setProducts] = useState<any[]>([]);
-<<<<<<< HEAD
-  const [user, setUser] = useState<any>(null);
-=======
   const { user } = useUser();
->>>>>>> 414d771 (CSS Changes)
   const [search, setSearch] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [sort, setSort] = useState("");
@@ -38,24 +31,6 @@ export default function Home() {
     fetchProducts();
   }, []);
 
-<<<<<<< HEAD
-  useEffect(() => {
-    const fetchUser = async () => {
-      const res = await fetch("/api/user/me", {
-        credentials: "include",
-      });
-
-      if (res.ok) {
-        const data = await res.json();
-        setUser(data);
-      }
-    };
-
-    fetchUser();
-  }, []);
-
-=======
->>>>>>> 414d771 (CSS Changes)
   const addToCart = (product: any) => {
     const existingCart = JSON.parse(localStorage.getItem("cart") || "[]");
 
@@ -121,27 +96,17 @@ export default function Home() {
     });
 
   return (
-<<<<<<< HEAD
-    <div className="min-h-screen bg-[#0B0B10]">
-      <WelcomePopup />
-      <HeroSlider />
-=======
     <div className="min-h-screen bg-bg">
       <WelcomePopup />
       <HeroSlider />
       <TrustStrip />
->>>>>>> 414d771 (CSS Changes)
 
       <div className="max-w-7xl mx-auto px-4 md:px-8 py-12">
         {/* Filter bar */}
         <div className="flex flex-col lg:flex-row gap-4 mb-10 lg:items-center lg:justify-between">
           <div className="relative flex-1 max-w-md">
             <svg
-<<<<<<< HEAD
-              className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#5A5A66]"
-=======
               className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-faint"
->>>>>>> 414d771 (CSS Changes)
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -158,40 +123,21 @@ export default function Home() {
               placeholder="Search products…"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-<<<<<<< HEAD
-              className="w-full bg-[#15151D] border border-[#2A2A35] text-white placeholder-[#5A5A66] pl-11 pr-4 py-3 rounded-xl outline-none focus:border-[#7C5CFC] transition text-sm"
-=======
               className="w-full bg-surface border border-line text-ink placeholder:text-faint pl-11 pr-4 py-3 rounded-xl outline-none focus:border-brand transition text-sm"
->>>>>>> 414d771 (CSS Changes)
             />
           </div>
 
           <div className="flex flex-wrap items-center gap-3">
-<<<<<<< HEAD
-            <div className="flex gap-2 bg-[#15151D] border border-[#2A2A35] rounded-xl p-1">
-=======
             <div className="flex gap-2 bg-surface border border-line rounded-xl p-1">
->>>>>>> 414d771 (CSS Changes)
               {CATEGORIES.map((cat) => (
                 <button
                   key={cat}
                   onClick={() => setSelectedCategory(cat)}
                   className={`px-3.5 py-2 rounded-lg text-xs font-medium transition ${
                     selectedCategory === cat
-<<<<<<< HEAD
-                      ? "text-[#0B0B10]"
-                      : "text-[#8B8B99] hover:text-white"
-                  }`}
-                  style={
-                    selectedCategory === cat
-                      ? { background: "linear-gradient(90deg, #7C5CFC, #33E6CC)" }
-                      : undefined
-                  }
-=======
                       ? "bg-brand text-bg"
                       : "text-muted hover:text-ink"
                   }`}
->>>>>>> 414d771 (CSS Changes)
                 >
                   {cat}
                 </button>
@@ -201,11 +147,7 @@ export default function Home() {
             <select
               value={sort}
               onChange={(e) => setSort(e.target.value)}
-<<<<<<< HEAD
-              className="bg-[#15151D] border border-[#2A2A35] text-white text-sm px-3 py-3 rounded-xl outline-none focus:border-[#7C5CFC] transition"
-=======
               className="bg-surface border border-line text-ink text-sm px-3 py-3 rounded-xl outline-none focus:border-brand transition"
->>>>>>> 414d771 (CSS Changes)
             >
               <option value="">Sort</option>
               <option value="low">Price: Low to High</option>
@@ -214,18 +156,6 @@ export default function Home() {
           </div>
         </div>
 
-<<<<<<< HEAD
-        <h1
-          className="text-white text-3xl md:text-4xl font-bold mb-8 tracking-tight"
-          style={{ fontFamily: "var(--font-display, sans-serif)" }}
-        >
-          Our products
-        </h1>
-
-        {filteredProducts.length === 0 ? (
-          <div className="text-center py-24">
-            <p className="text-[#8B8B99] text-sm">
-=======
         <div className="mb-8">
           <span className="text-brand text-xs font-semibold tracking-[0.25em] uppercase">
             Shop
@@ -241,16 +171,11 @@ export default function Home() {
         {filteredProducts.length === 0 ? (
           <div className="text-center py-24">
             <p className="text-muted text-sm">
->>>>>>> 414d771 (CSS Changes)
               Nothing matches that search. Try a different term or category.
             </p>
           </div>
         ) : (
-<<<<<<< HEAD
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-=======
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 stagger">
->>>>>>> 414d771 (CSS Changes)
             {filteredProducts.map((product) => (
               <ProductCard
                 key={product._id}
@@ -287,16 +212,6 @@ function ProductCard({
     <div
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
-<<<<<<< HEAD
-      className="relative rounded-2xl p-[1px] transition-all duration-300"
-      style={{
-        background: hover
-          ? "linear-gradient(135deg, #7C5CFC, #33E6CC)"
-          : "#2A2A35",
-      }}
-    >
-      <div className="bg-[#15151D] rounded-[15px] overflow-hidden h-full">
-=======
       className="relative rounded-2xl p-[1px] transition-all duration-300 hover:-translate-y-1"
       style={{
         background: hover
@@ -305,7 +220,6 @@ function ProductCard({
       }}
     >
       <div className="bg-surface rounded-[15px] overflow-hidden h-full">
->>>>>>> 414d771 (CSS Changes)
         <div className="relative overflow-hidden h-56">
           <img
             src={product.image}
@@ -313,31 +227,18 @@ function ProductCard({
             className="w-full h-full object-cover transition duration-500"
             style={{ transform: hover ? "scale(1.05)" : "scale(1)" }}
           />
-<<<<<<< HEAD
-          <span className="absolute top-3 left-3 bg-[#0B0B10]/80 backdrop-blur text-[#33E6CC] text-[11px] font-medium px-2.5 py-1 rounded-full border border-[#2A2A35]">
-=======
           <span className="absolute top-3 left-3 bg-bg/80 backdrop-blur text-accent text-[11px] font-medium px-2.5 py-1 rounded-full border border-line">
->>>>>>> 414d771 (CSS Changes)
             {product.category}
           </span>
         </div>
 
         <div className="p-4">
-<<<<<<< HEAD
-          <h2 className="text-white font-semibold truncate">{product.name}</h2>
-          <p className="text-[#33E6CC] font-bold mt-1">${product.price}</p>
-
-          <div className="flex flex-col gap-2 mt-4">
-            <Link href={`/product/${product._id}`}>
-              <button className="w-full border border-[#2A2A35] text-white py-2 rounded-lg text-sm hover:border-[#7C5CFC] transition">
-=======
           <h2 className="text-ink font-semibold truncate">{product.name}</h2>
           <p className="text-accent font-bold mt-1">${product.price}</p>
 
           <div className="flex flex-col gap-2 mt-4">
             <Link href={`/product/${product._id}`}>
               <button className="w-full border border-line text-ink py-2 rounded-lg text-sm hover:border-brand transition">
->>>>>>> 414d771 (CSS Changes)
                 View product
               </button>
             </Link>
@@ -345,23 +246,14 @@ function ProductCard({
             <div className="flex gap-2">
               <button
                 onClick={() => onAddToCart(product)}
-<<<<<<< HEAD
-                className="flex-1 text-[#0B0B10] font-semibold py-2 rounded-lg text-sm transition"
-                style={{ background: "linear-gradient(90deg, #7C5CFC, #33E6CC)" }}
-=======
                 className="flex-1 text-bg font-semibold py-2 rounded-lg text-sm transition bg-brand hover:bg-brand-hover"
->>>>>>> 414d771 (CSS Changes)
               >
                 Add to cart
               </button>
               <button
                 onClick={() => onAddToWishlist(product._id)}
                 aria-label="Add to wishlist"
-<<<<<<< HEAD
-                className="w-10 flex items-center justify-center border border-[#2A2A35] rounded-lg text-[#8B8B99] hover:text-[#FF6B9E] hover:border-[#FF6B9E] transition"
-=======
                 className="w-10 flex items-center justify-center border border-line rounded-lg text-muted hover:text-heart hover:border-heart transition"
->>>>>>> 414d771 (CSS Changes)
               >
                 ♥
               </button>
@@ -370,11 +262,7 @@ function ProductCard({
             {isAdmin && (
               <div className="flex gap-2 pt-1">
                 <Link href={`/admin/edit-product/${product._id}`} className="flex-1">
-<<<<<<< HEAD
-                  <button className="w-full text-amber-400 border border-amber-400/30 py-2 rounded-lg text-xs hover:bg-amber-400/10 transition">
-=======
                   <button className="w-full text-soft border border-line py-2 rounded-lg text-xs hover:border-brand transition">
->>>>>>> 414d771 (CSS Changes)
                     Edit
                   </button>
                 </Link>
@@ -392,8 +280,6 @@ function ProductCard({
     </div>
   );
 }
-<<<<<<< HEAD
-=======
 
 function TrustStrip() {
   const items = [
@@ -459,4 +345,3 @@ function TrustStrip() {
     </div>
   );
 }
->>>>>>> 414d771 (CSS Changes)

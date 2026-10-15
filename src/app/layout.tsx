@@ -1,9 +1,3 @@
-
-import Navbar from "@/components/Navbar";
-import "./global.css";
-import { Toaster } from "react-hot-toast";
-import Footer from "@/components/Footer";
-
 import type { Metadata } from "next";
 import { Space_Grotesk, Inter } from "next/font/google";
 import { Toaster } from "react-hot-toast";
@@ -26,25 +20,12 @@ export const metadata: Metadata = {
   description: "A modern ecommerce store built with Next.js and MongoDB.",
 };
 
-
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   return (
-
-
-    <html lang="en">
-      <body>
-        <Navbar /> 
-        <Toaster position="top-right" /> 
-        {children}
-        <Footer />
-      </body>
-    </html>
-  );
-}
     <html lang="en" className={`${display.variable} ${body.variable}`}>
       <body
         className="min-h-screen flex flex-col"

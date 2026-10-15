@@ -76,34 +76,16 @@ export default function CartPage() {
   };
 
   return (
-<<<<<<< HEAD
-    <div className="min-h-screen bg-[#0B0B10] px-4 md:px-8 py-12">
-      <div className="max-w-4xl mx-auto">
-        <h1
-          className="text-white text-3xl md:text-4xl font-bold mb-8 tracking-tight"
-=======
     <div className="min-h-screen bg-bg px-4 md:px-8 py-12">
       <div className="max-w-4xl mx-auto">
         <h1
           className="text-ink text-3xl md:text-4xl font-bold mb-8 tracking-tight"
->>>>>>> 414d771 (CSS Changes)
           style={{ fontFamily: "var(--font-display, sans-serif)" }}
         >
           Your cart
         </h1>
 
         {cart.length === 0 ? (
-<<<<<<< HEAD
-          <div className="bg-[#15151D] border border-[#2A2A35] p-10 rounded-2xl text-center">
-            <p className="text-[#8B8B99]">Your cart is empty.</p>
-          </div>
-        ) : (
-          <div className="space-y-4">
-            {cart.map((item) => (
-              <div
-                key={item._id}
-                className="bg-[#15151D] border border-[#2A2A35] rounded-2xl p-4 flex flex-col md:flex-row items-center gap-6"
-=======
           <div className="bg-surface border border-line p-10 rounded-2xl text-center">
             <p className="text-muted">Your cart is empty.</p>
           </div>
@@ -113,7 +95,6 @@ export default function CartPage() {
               <div
                 key={item._id}
                 className="bg-surface border border-line rounded-2xl p-4 flex flex-col md:flex-row items-center gap-6"
->>>>>>> 414d771 (CSS Changes)
               >
                 <img
                   src={item.image}
@@ -122,43 +103,24 @@ export default function CartPage() {
                 />
 
                 <div className="flex-1 w-full text-center md:text-left">
-<<<<<<< HEAD
-                  <h2 className="text-white text-lg font-semibold">
-                    {item.name}
-                  </h2>
-                  <p className="text-[#33E6CC] mt-1">${item.price}</p>
-=======
                   <h2 className="text-ink text-lg font-semibold">
                     {item.name}
                   </h2>
                   <p className="text-accent mt-1">${item.price}</p>
->>>>>>> 414d771 (CSS Changes)
 
                   <div className="flex justify-center md:justify-start items-center gap-3 mt-4">
                     <button
                       onClick={() => decreaseQuantity(item._id)}
-<<<<<<< HEAD
-                      className="w-9 h-9 flex items-center justify-center bg-[#0B0B10] border border-[#2A2A35] rounded-lg text-white hover:border-[#7C5CFC] transition"
-                    >
-                      −
-                    </button>
-                    <span className="text-white font-semibold w-6 text-center">
-=======
                       className="w-9 h-9 flex items-center justify-center bg-bg border border-line rounded-lg text-ink hover:border-brand transition"
                     >
                       −
                     </button>
                     <span className="text-ink font-semibold w-6 text-center">
->>>>>>> 414d771 (CSS Changes)
                       {item.quantity}
                     </span>
                     <button
                       onClick={() => increaseQuantity(item._id)}
-<<<<<<< HEAD
-                      className="w-9 h-9 flex items-center justify-center bg-[#0B0B10] border border-[#2A2A35] rounded-lg text-white hover:border-[#7C5CFC] transition"
-=======
                       className="w-9 h-9 flex items-center justify-center bg-bg border border-line rounded-lg text-ink hover:border-brand transition"
->>>>>>> 414d771 (CSS Changes)
                     >
                       +
                     </button>
@@ -166,11 +128,7 @@ export default function CartPage() {
                 </div>
 
                 <div className="flex flex-col items-center md:items-end gap-3 w-full md:w-auto">
-<<<<<<< HEAD
-                  <p className="text-white text-lg font-bold">
-=======
                   <p className="text-ink text-lg font-bold">
->>>>>>> 414d771 (CSS Changes)
                     ${item.price * item.quantity}
                   </p>
                   <button
@@ -183,15 +141,9 @@ export default function CartPage() {
               </div>
             ))}
 
-<<<<<<< HEAD
-            <div className="bg-[#15151D] border border-[#2A2A35] p-6 rounded-2xl flex justify-between items-center mt-6">
-              <h2 className="text-white text-xl font-semibold">Total</h2>
-              <p className="text-2xl font-bold text-[#33E6CC]">
-=======
             <div className="bg-surface border border-line p-6 rounded-2xl flex justify-between items-center mt-6">
               <h2 className="text-ink text-xl font-semibold">Total</h2>
               <p className="text-2xl font-bold text-accent">
->>>>>>> 414d771 (CSS Changes)
                 ${totalPrice}
               </p>
             </div>
@@ -199,12 +151,7 @@ export default function CartPage() {
             <button
               onClick={handleCheckout}
               disabled={checkingOut}
-<<<<<<< HEAD
-              className="w-full text-[#0B0B10] font-semibold py-3.5 rounded-xl mt-2 transition disabled:opacity-60"
-              style={{ background: "linear-gradient(90deg, #7C5CFC, #33E6CC)" }}
-=======
               className="w-full text-bg font-semibold py-3.5 rounded-xl mt-2 transition disabled:opacity-60 bg-brand hover:bg-brand-hover"
->>>>>>> 414d771 (CSS Changes)
             >
               {checkingOut ? "Redirecting to checkout…" : "Proceed to checkout"}
             </button>
