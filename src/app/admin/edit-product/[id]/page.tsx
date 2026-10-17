@@ -3,8 +3,7 @@
 import { useEffect, useState } from "react";
 import { use } from "react";
 import toast from "react-hot-toast";
-
-const CATEGORIES = ["Phones", "Shoes", "Clothes"];
+import CategoryPicker from "@/components/CategoryPicker";
 
 export default function EditProductPage({
   params,
@@ -17,7 +16,7 @@ export default function EditProductPage({
   const [price, setPrice] = useState("");
   const [description, setDescription] = useState("");
   const [images, setImages] = useState<string[]>([]);
-  const [category, setCategory] = useState(CATEGORIES[0]);
+  const [category, setCategory] = useState("");
   const [user, setUser] = useState<any>(null);
   const [userLoading, setUserLoading] = useState(true);
   const [productLoading, setProductLoading] = useState(true);
@@ -52,7 +51,7 @@ export default function EditProductPage({
             ? [data.image]
             : [],
       );
-      setCategory(data.category || CATEGORIES[0]);
+      setCategory(data.category || "");
       setProductLoading(false);
     };
 
@@ -177,17 +176,7 @@ export default function EditProductPage({
             className="w-full bg-bg border border-line text-ink placeholder:text-faint p-3 rounded-xl outline-none focus:border-brand transition text-sm resize-none"
           />
 
-          <select
-            value={category}
-            onChange={(e) => setCategory(e.target.value)}
-            className="w-full bg-bg border border-line text-ink p-3 rounded-xl outline-none focus:border-brand transition text-sm"
-          >
-            {CATEGORIES.map((cat) => (
-              <option key={cat} value={cat}>
-                {cat}
-              </option>
-            ))}
-          </select>
+          <CategoryPicker value={category} onChange={setCategory} />
 
           <label className="relative flex flex-col items-center justify-center border border-dashed border-line hover:border-brand rounded-xl p-6 cursor-pointer transition text-center">
             <input

@@ -7,14 +7,25 @@ import WelcomePopup from "@/components/WelcomePopup";
 import { toast } from "react-hot-toast";
 import { useUser } from "@/lib/useUser";
 
-const CATEGORIES = ["All", "Phones", "Shoes", "Clothes"];
-
 export default function Home() {
   const [products, setProducts] = useState<any[]>([]);
   const { user } = useUser();
   const [search, setSearch] = useState("");
+  const [categories, setCategories] = useState<string[]>([]);
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [sort, setSort] = useState("");
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      const res = await fetch("/api/categories");
+      if (res.ok) {
+        const data = await res.json();
+        setCategories(Array.isArray(data) ? data : []);
+      }
+    };
+
+    fetchCategories();
+  }, []);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -128,12 +139,12 @@ export default function Home() {
           </div>
 
           <div className="flex flex-wrap items-center gap-3">
-            <div className="flex gap-2 bg-surface border border-line rounded-xl p-1">
-              {CATEGORIES.map((cat) => (
+            <div className="flex gap-2 bg-surface border border-line rounded-xl p-1 max-w-full overflow-x-auto">
+              {["All", ...categories].map((cat) => (
                 <button
                   key={cat}
                   onClick={() => setSelectedCategory(cat)}
-                  className={`px-3.5 py-2 rounded-lg text-xs font-medium transition ${
+                  className={`shrink-0 whitespace-nowrap px-3.5 py-2 rounded-lg text-xs font-medium transition ${
                     selectedCategory === cat
                       ? "bg-brand text-bg"
                       : "text-muted hover:text-ink"

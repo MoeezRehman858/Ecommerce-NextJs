@@ -2,15 +2,14 @@
 
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-
-const CATEGORIES = ["Phones", "Shoes", "Clothes"];
+import CategoryPicker from "@/components/CategoryPicker";
 
 export default function AddProductPage() {
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
   const [description, setDescription] = useState("");
   const [images, setImages] = useState<string[]>([]);
-  const [category, setCategory] = useState(CATEGORIES[0]);
+  const [category, setCategory] = useState("");
   const [user, setUser] = useState<any>(null);
   const [userLoading, setUserLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
@@ -72,8 +71,8 @@ export default function AddProductPage() {
   };
 
   const handleAddProduct = async () => {
-    if (!name || !price || images.length === 0) {
-      toast.error("Name, price and at least one image are required.");
+    if (!name || !price || !category || images.length === 0) {
+      toast.error("Name, price, category and at least one image are required.");
       return;
     }
 
@@ -101,7 +100,7 @@ export default function AddProductPage() {
         setPrice("");
         setDescription("");
         setImages([]);
-        setCategory(CATEGORIES[0]);
+        setCategory("");
       } else {
         toast.error(data.message || "Failed to add product");
       }
@@ -154,17 +153,7 @@ export default function AddProductPage() {
             className="w-full bg-bg border border-line text-ink placeholder:text-faint p-3 rounded-xl outline-none focus:border-brand transition text-sm resize-none"
           />
 
-          <select
-            value={category}
-            onChange={(e) => setCategory(e.target.value)}
-            className="w-full bg-bg border border-line text-ink p-3 rounded-xl outline-none focus:border-brand transition text-sm"
-          >
-            {CATEGORIES.map((cat) => (
-              <option key={cat} value={cat}>
-                {cat}
-              </option>
-            ))}
-          </select>
+          <CategoryPicker value={category} onChange={setCategory} />
 
           {/* Multi-image upload */}
           <label className="relative flex flex-col items-center justify-center border border-dashed border-line hover:border-brand rounded-xl p-6 cursor-pointer transition text-center">
